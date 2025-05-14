@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Услуги в отелях{% endblock %}
+{% block content %}
+<h2 class="text-2xl font-semibold mb-4">Доступность услуг</h2>
+<table class="min-w-full bg-white rounded-lg overflow-hidden">
+  <thead class="bg-gray-100">
+    <tr>
+      <th class="px-4 py-2 text-left">Отель</th>
+      <th class="px-4 py-2 text-left">Услуга</th>
+      <th class="px-4 py-2 text-left">Активна</th>
+      <th class="px-4 py-2 text-center">Действия</th>
+    </tr>
+  </thead>
+  <tbody class="divide-y">
+    {% for srv in object_list %}
+    <tr>
+      <td class="px-4 py-2">{{ srv.building.name }}</td>
+      <td class="px-4 py-2">{{ srv.service.name }}</td>
+      <td class="px-4 py-2">{{ srv.is_active|yesno:"Да,Нет" }}</td>
+      <td class="px-4 py-2 text-center">
+        <a href="{% url 'buildingservices_edit' srv.pk %}" class="text-blue-600 hover:underline">✎</a>
+      </td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="4" class="p-4 text-center text-gray-500">Нет записей</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

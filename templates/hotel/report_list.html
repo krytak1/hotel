@@ -1,0 +1,39 @@
+<!-- report_list.html -->
+
+{% extends 'base.html' %}
+
+{% block title %}Отчеты{% endblock %}
+
+{% block header %}Отчеты{% endblock %}
+
+{% block content %}
+  <div class="mb-8">
+    <h2 class="text-2xl font-semibold">Отчеты</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Пример отчета 1 -->
+      <div class="card">
+        <h3 class="text-xl font-medium">Отчет по доходам</h3>
+        <p>Здесь будет информация по доходам за последний месяц</p>
+        <!-- Ссылка для скачивания отчета -->
+        <a href="{% url 'report_download' %}" class="btn-primary mt-4 block text-center">Скачать</a>
+      </div>
+
+      <!-- Пример отчета 2 -->
+      <div class="card">
+        <h3 class="text-xl font-medium">Отчет по бронированиям</h3>
+        <p>Здесь будет информация по бронированиям за последние 30 дней</p>
+        <!-- Ссылка для скачивания отчета -->
+        <a href="{% url 'report_download' %}" class="btn-primary mt-4 block text-center">Скачать</a>
+      </div>
+
+      <!-- Пример отчета 3 -->
+      <div class="card">
+        <h3 class="text-xl font-medium">Отчет по клиентам</h3>
+        <p>Здесь будет информация по клиентам и их активности</p>
+        <!-- Ссылка для скачивания отчета -->
+        <a href="{% url 'report_download' %}" class="btn-primary mt-4 block text-center">Скачать</a>
+      </div>
+    </div>
+  </div>
+{% endblock %}

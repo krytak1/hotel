@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% block title %}Заказы товаров и услуг{% endblock %}
+
+{% block content %}
+<div class="mb-8">
+  <div class="flex justify-between items-center mb-4">
+    <h2 class="text-2xl font-semibold">Заказы товаров и услуг</h2>
+    <div class="space-x-2">
+      <a href="{% url 'productorder_add' %}" class="btn-primary">Новый заказ товара</a>
+      <a href="{% url 'serviceorder_add' %}" class="btn-primary">Новый заказ услуги</a>
+    </div>
+  </div>
+
+  <!-- Товары -->
+  <div class="mb-8">
+    <h3 class="text-xl font-semibold px-6 py-4">Заказы товаров</h3>
+    <div class="bg-white rounded-lg shadow overflow-hidden">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Клиент</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Товар</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Кол-во</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Наличие</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Дата</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+          {% for item in product_orders %}
+          {% with o=item.order stock=item.stock %}
+          <tr class="{% if stock and stock.available < o.quantity %}bg-red-50{% endif %}">
+            <td class="px-6 py-4 whitespace-nowrap">{{ o.accommodation.booking.client.get_full_name }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">{{ o.product.name }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">{{ o.quantity }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              {% if stock and stock.available >= o.quantity %}
+                ✔ ({{ stock.available }})
+              {% else %}
+                ✘
+                {% if stock %}
+                  (<a href="{% url 'buildingproducts_edit' stock.pk %}" class="underline">обновить</a>)
+                {% else %}
+                  (нет данных)
+                {% endif %}
+              {% endif %}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">{{ o.order_date }}</td>
+          </tr>
+          {% endwith %}
+          {% empty %}
+          <tr>
+            <td colspan="5" class="px-6 py-4 text-center text-gray-500">Нет заказов товаров</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Услуги -->
+  <div>
+    <h3 class="text-xl font-semibold px-6 py-4">Заказы услуг</h3>
+    <div class="bg-white rounded-lg shadow overflow-hidden">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Клиент</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Услуга</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Дата</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+          {% for o in service_orders %}
+          <tr>
+            <td class="px-6 py-4 whitespace-nowrap">{{ o.accommodation.booking.client.get_full_name }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">{{ o.service.name }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">{{ o.order_date }}</td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="3" class="px-6 py-4 text-center text-gray-500">Нет заказов услуг</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

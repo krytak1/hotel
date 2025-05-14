@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Заказы услуг{% endblock %}
+{% block content %}
+<h2 class="text-2xl font-semibold mb-4">Заказы услуг</h2>
+<div class="mb-4">
+  <a href="{% url 'serviceorder_add' %}" class="btn-primary">Добавить заказ</a>
+</div>
+<table class="min-w-full bg-white rounded-lg overflow-hidden">
+  <thead class="bg-gray-100">
+    <tr>
+      <th class="px-4 py-2 text-left">Проживание</th>
+      <th class="px-4 py-2 text-left">Услуга</th>
+      <th class="px-4 py-2 text-left">Дата заказа</th>
+      <th class="px-4 py-2 text-center">Действия</th>
+    </tr>
+  </thead>
+  <tbody class="divide-y">
+    {% for o in object_list %}
+    <tr>
+      <td class="px-4 py-2">{{ o.accommodation }}</td>
+      <td class="px-4 py-2">{{ o.service }}</td>
+      <td class="px-4 py-2">{{ o.order_date }}</td>
+      <td class="px-4 py-2 text-center">
+        <a href="{% url 'serviceorder_list' %}" class="text-blue-600 hover:underline">✎</a>
+      </td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="4" class="p-4 text-center text-gray-500">Нет заказов</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}Клиент — {{ client.get_full_name }}{% endblock %}
+{% block content %}
+<h2 class="text-xl mb-4">{{ client.get_full_name }}</h2>
+<p><strong>Телефон:</strong> {{ client.phone }}</p>
+<p><strong>Email:</strong>   {{ client.email }}</p>
+<p><strong>Паспорт:</strong> {{ client.passport_data }}</p>
+<p><strong>Регистрация:</strong> {{ client.registration_date }}</p>
+
+<div class="mt-6">
+  <a href="{% url 'client_edit' client.pk %}" class="btn-primary">Редактировать</a>
+</div>
+
+<hr class="my-6">
+<h3 class="text-lg mb-2">История бронирований</h3>
+<ul class="list-disc ml-6">
+  {% for b in bookings %}
+    <li>{{ b.checkin_date }} → {{ b.checkout_date }} ({{ b.status }})</li>
+  {% empty %}
+    <li>Нет бронирований</li>
+  {% endfor %}
+</ul>
+
+<hr class="my-6">
+<h3 class="text-lg mb-2">Отзывы</h3>
+<ul class="list-disc ml-6">
+  {% for r in reviews %}
+    <li>{{ r.publication_date }} — {{ r.rating }}/5: “{{ r.review_text }}”</li>
+  {% empty %}
+    <li>Нет отзывов</li>
+  {% endfor %}
+</ul>
+{% endblock %}

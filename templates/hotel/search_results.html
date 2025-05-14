@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}Результаты поиска{% endblock %}
+{% block content %}
+  <h2 class="text-2xl mb-4">Результаты поиска</h2>
+  {% if results %}
+    <ul class="space-y-2">
+      {% for client in results %}
+        <li>{{ client.get_full_name }} — {{ client.phone }}</li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p class="text-gray-500">Ничего не найдено.</p>
+  {% endif %}
+{% endblock %}

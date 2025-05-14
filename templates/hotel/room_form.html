@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{{ view.object|default_if_none:"Новый номер" }}{% endblock %}
+{% block content %}
+  <h2 class="text-2xl mb-4">
+    {{ view.object|default_if_none:"Новый номер" }}
+  </h2>
+  <form method="post" class="space-y-4">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    {% for field in form %}
+      <div>
+        <label for="{{ field.id_for_label }}" class="block text-gray-700 mb-1">
+          {{ field.label }}{% if field.field.required %}<span class="text-red-500">*</span>{% endif %}
+        </label>
+        {{ field }}
+        {% if field.help_text %}
+          <p class="text-gray-500 text-sm">{{ field.help_text }}</p>
+        {% endif %}
+        <p class="text-red-500 text-sm">{{ field.errors }}</p>
+      </div>
+    {% endfor %}
+    <button type="submit" class="btn-primary">Сохранить</button>
+  </form>
+{% endblock %}

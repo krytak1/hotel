@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block title %}{{ view.title }}{% endblock %}
+{% block content %}
+  <h2 class="text-2xl mb-4">{{ view.title }}</h2>
+  <form method="post" class="space-y-4">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <button type="submit" class="btn-primary">Сохранить</button>
+  </form>
+{% endblock %}

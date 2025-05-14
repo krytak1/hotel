@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}{% if form.instance.pk %}Редактировать{% else %}Новая{% endif %} должность{% endblock %}
+{% block content %}
+<h2 class="text-2xl font-semibold mb-4">
+  {% if form.instance.pk %}Редактирование{% else %}Добавление{% endif %} должности
+</h2>
+<form method="post" class="bg-white p-6 rounded-lg shadow-md space-y-4">
+  {% csrf_token %}
+  {{ form.non_field_errors }}
+  <div>
+    {{ form.name.label_tag }}<br>
+    {{ form.name }}
+    {{ form.name.errors }}
+  </div>
+  <button type="submit" class="btn-primary">Сохранить</button>
+</form>
+{% endblock %}

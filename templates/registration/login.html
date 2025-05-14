@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Войти{% endblock %}
+{% block content %}
+<div class="max-w-md mx-auto bg-white shadow p-6 rounded">
+  <h2 class="text-xl font-semibold mb-4">Войти в аккаунт</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    <div class="mb-4">
+      {{ form.username.label_tag }}
+      {{ form.username }}
+      {{ form.username.errors }}
+    </div>
+    <div class="mb-4">
+      {{ form.password.label_tag }}
+      {{ form.password }}
+      {{ form.password.errors }}
+    </div>
+    <button type="submit" class="btn-primary w-full">Войти</button>
+  </form>
+  <p class="mt-4 text-center">
+    Нет аккаунта?
+    <a href="{% url 'accounts:signup' %}" class="text-blue-500 hover:underline">
+      Зарегистрироваться
+    </a>
+  </p>
+</div>
+{% endblock %}

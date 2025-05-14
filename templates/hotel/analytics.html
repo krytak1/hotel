@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Аналитика{% endblock %}
+{% block content %}
+  <h2 class="text-2xl mb-4">Аналитика</h2>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+    <div class="card">
+      <div class="text-lg font-medium">Процент загрузки</div>
+      <div class="text-3xl text-green-700">{{ occupancy_rate }}%</div>
+    </div>
+    <div class="card">
+      <div class="text-lg font-medium">Выручка за 30 дней</div>
+      <div class="text-3xl text-green-700">₽{{ monthly_revenue }}</div>
+    </div>
+    <div class="card">
+      <div class="text-lg font-medium">Средний рейтинг</div>
+      <div class="text-3xl text-green-700">{{ average_rating|floatformat:1 }}/5</div>
+    </div>
+  </div>
+
+  <h3 class="text-xl mb-2">Доходы по дням (последний месяц)</h3>
+  <canvas id="chartRevenue"></canvas>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    const labels = {{ daily_payments|pluck:'day'|safe }};
+    const data = {{ daily_payments|pluck:'sum'|safe }};
+    new Chart(document.getElementById('chartRevenue'), {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'Доход, ₽',
+          data: data,
+          fill: false,
+        }]
+      }
+    });
+  </script>
+{% endblock %}

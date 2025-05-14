@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+  <h2 class="text-xl mb-4">{{ title }}</h2>
+
+  <p class="mb-2 text-sm text-gray-600">Проживание клиента: <strong>{{ accommodation.booking.client }}</strong></p>
+
+  <div class="flex gap-4 mb-4">
+    <a href="{% url 'product_order' accommodation.pk %}" class="btn-primary">Заказать товар</a>
+    <a href="{% url 'service_order' accommodation.pk %}" class="btn-primary">Добавить услугу</a>
+  </div>
+
+  <h3 class="text-lg font-bold mt-6 mb-2">Заказанные товары</h3>
+  <ul class="list-disc pl-5 mb-4">
+    {% for order in product_orders %}
+      <li>{{ order.product.name }} — {{ order.quantity }} шт. ({{ order.order_date }})</li>
+    {% empty %}
+      <li class="text-gray-500">Нет заказов</li>
+    {% endfor %}
+  </ul>
+
+  <h3 class="text-lg font-bold mb-2">Заказанные услуги</h3>
+  <ul class="list-disc pl-5">
+    {% for order in service_orders %}
+      <li>{{ order.service.name }} ({{ order.order_date }})</li>
+    {% empty %}
+      <li class="text-gray-500">Нет заказов</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

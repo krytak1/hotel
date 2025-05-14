@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Заказы товаров{% endblock %}
+
+{% block content %}
+  <h2 class="text-2xl mb-4">Заказы товаров</h2>
+  <a href="{% url 'productorder_add' %}" class="btn-primary mb-4 inline-block">Новый заказ</a>
+
+  <table class="min-w-full bg-white border border-gray-200 rounded-lg shadow">
+    <thead class="bg-gray-100">
+      <tr>
+        <th class="px-4 py-2 text-left text-sm font-medium text-gray-500">Проживание</th>
+        <th class="px-4 py-2 text-left text-sm font-medium text-gray-500">Продукт</th>
+        <th class="px-4 py-2 text-left text-sm font-medium text-gray-500">Количество</th>
+        <th class="px-4 py-2 text-left text-sm font-medium text-gray-500">Действия</th>
+      </tr>
+    </thead>
+    <tbody class="bg-white divide-y divide-gray-200">
+    {% for obj in object_list %}
+      <tr>
+        <td class="px-4 py-2 text-sm text-gray-700">{{ obj.accommodation }}</td>
+        <td class="px-4 py-2 text-sm text-gray-700">{{ obj.product }}</td>
+        <td class="px-4 py-2 text-sm text-gray-700">{{ obj.quantity }}</td>
+        <td class="px-4 py-2 text-sm text-gray-700">
+          <a href="{% url 'productorder_edit' obj.pk %}" class="text-blue-600 hover:text-blue-800">✎</a>
+          <a href="{% url 'productorder_delete' obj.pk %}" class="text-red-600 hover:text-red-800">🗑</a>
+        </td>
+      </tr>
+    {% empty %}
+      <tr>
+        <td colspan="4" class="px-4 py-2 text-center text-gray-500">Нет заказов товаров</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+
+  <!-- Пагинация -->
+  <div class="mt-4 flex justify-between items-center">
+    <div>
+      {% if page_obj.has_previous %}
+        <a href="?page=1" class="btn-primary">Первая</a>
+        <a href="?page={{ page_obj.previous_page_number }}" class="btn-primary">Предыдущая</a>
+      {% endif %}
+    </div>
+
+    <div>
+      <span class="text-gray-700">Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}</span>
+    </div>
+
+    <div>
+      {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}" class="btn-primary">Следующая</a>
+        <a href="?page={{ page_obj.paginator.num_pages }}" class="btn-primary">Последняя</a>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

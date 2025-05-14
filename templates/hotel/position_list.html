@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Должности{% endblock %}
+{% block content %}
+<h2 class="text-2xl font-semibold mb-4">Должности</h2>
+<div class="mb-4">
+  <a href="{% url 'position_add' %}" class="btn-primary">Добавить должность</a>
+</div>
+<table class="min-w-full bg-white rounded-lg overflow-hidden">
+  <thead class="bg-gray-100">
+    <tr>
+      <th class="px-4 py-2 text-left">Название</th>
+      <th class="px-4 py-2 text-center">Действия</th>
+    </tr>
+  </thead>
+  <tbody class="divide-y">
+    {% for pos in object_list %}
+    <tr>
+      <td class="px-4 py-2">{{ pos.name }}</td>
+      <td class="px-4 py-2 text-center space-x-2">
+        <a href="{% url 'position_edit' pos.pk %}" class="text-blue-600 hover:underline">✎</a>
+        <a href="{% url 'position_delete' pos.pk %}" class="text-red-600 hover:underline">🗑</a>
+      </td>
+    </tr>
+    {% empty %}
+    <tr>
+      <td colspan="2" class="p-4 text-center text-gray-500">Нет должностей</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

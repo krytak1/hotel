@@ -1,0 +1,52 @@
+{# templates/hotel/inventory_list.html #}
+{% extends 'base.html' %}
+
+{% block title %}Товары и услуги{% endblock %}
+
+{% block content %}
+  <h2 class="text-2xl font-semibold mb-4">Товары</h2>
+  <table class="min-w-full bg-white shadow rounded mb-8">
+    <thead class="bg-gray-50">
+      <tr>
+        <th class="px-4 py-2 text-left">Товар</th>
+        <th class="px-4 py-2 text-right">Цена</th>
+        <th class="px-4 py-2 text-right">Доступно</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in products %}
+        <tr class="border-t">
+          <td class="px-4 py-2">{{ item.product.name }}</td>
+          <td class="px-4 py-2 text-right">{{ item.product.price }} ₽</td>
+          <td class="px-4 py-2 text-right">{{ item.available }}</td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="3" class="px-4 py-2 text-center text-gray-500">Нет товаров</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <h2 class="text-2xl font-semibold mb-4">Услуги</h2>
+  <table class="min-w-full bg-white shadow rounded">
+    <thead class="bg-gray-50">
+      <tr>
+        <th class="px-4 py-2 text-left">Услуга</th>
+        <th class="px-4 py-2 text-right">Цена</th>
+        <th class="px-4 py-2 text-center">Активна</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for svc in services %}
+        <tr class="border-t">
+          <td class="px-4 py-2">{{ svc.service.name }}</td>
+          <td class="px-4 py-2 text-right">{{ svc.service.price }} ₽</td>
+          <td class="px-4 py-2 text-center">
+            {% if svc.is_active %}Да{% else %}Нет{% endif %}
+          </td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="3" class="px-4 py-2 text-center text-gray-500">Нет услуг</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

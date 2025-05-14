@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %}{{ form.instance.pk|yesno:"Редактировать заказ услуги,Новый заказ услуги" }}{% endblock %}
+{% block content %}
+<h2 class="text-2xl font-semibold mb-4">{{ block.super }}</h2>
+<form method="post" class="bg-white p-6 rounded-lg shadow">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <div class="mt-4">
+    <button type="submit" class="btn-primary">Сохранить</button>
+  </div>
+</form>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}Бронь #{{ booking.pk }}{% endblock %}
+{% block content %}
+<h2 class="text-2xl">Бронь #{{ booking.pk }}</h2>
+<ul class="mt-4">
+  <li>Клиент: {{ booking.client.get_full_name }}</li>
+  <li>Номер: {{ booking.room }}</li>
+  <li>Период: {{ booking.checkin_date }} — {{ booking.checkout_date }}</li>
+  <li>Статус: {{ booking.status }}</li>
+  <li>Стоимость: {{ booking.total_price }} руб.</li>
+</ul>
+<div class="mt-4 space-x-2">
+  <form action="{% url 'booking_checkin' booking.pk %}" method="post">{% csrf_token %}<button class="btn-primary">Заселиться</button></form>
+  <form action="{% url 'booking_checkout' booking.pk %}" method="post">{% csrf_token %}<button class="btn-primary">Выехать</button></form>
+  <form action="{% url 'booking_cancel' booking.pk %}" method="post">{% csrf_token %}<button class="btn-primary">Отменить</button></form>
+</div>
+{% endblock %}

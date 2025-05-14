@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}Проживания{% endblock %}
+{% block content %}
+  <h2 class="text-2xl mb-4">Список проживаний</h2>
+  <ul class="list-disc pl-4">
+    {% for a in accommodations %}
+      <li>
+        Клиент: {{ a.booking.client }} — 
+        {{ a.actual_checkin_date }} → {{ a.actual_checkout_date }} —
+        <a href="{% url 'order_list' a.pk %}" class="text-blue-600 underline">Заказы</a>
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock %}

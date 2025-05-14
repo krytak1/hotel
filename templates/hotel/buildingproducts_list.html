@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Остатки товаров{% endblock %}
+{% block content %}
+<h2 class="text-2xl font-semibold mb-4">Остатки товаров</h2>
+<table class="min-w-full bg-white rounded-lg overflow-hidden">
+  <thead class="bg-gray-100">
+    <tr>
+      <th class="px-4 py-2 text-left">Отель</th>
+      <th class="px-4 py-2 text-left">Товар</th>
+      <th class="px-4 py-2 text-left">Доступно</th>
+      <th class="px-4 py-2 text-center">Действия</th>
+    </tr>
+  </thead>
+  <tbody class="divide-y">
+    {% for stk in object_list %}
+    <tr>
+      <td class="px-4 py-2">{{ stk.building.name }}</td>
+      <td class="px-4 py-2">{{ stk.product.name }}</td>
+      <td class="px-4 py-2">{{ stk.available }}</td>
+      <td class="px-4 py-2 text-center">
+        <a href="{% url 'buildingproducts_edit' stk.pk %}" class="text-blue-600 hover:underline">✎</a>
+      </td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="4" class="p-4 text-center text-gray-500">Нет записей</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

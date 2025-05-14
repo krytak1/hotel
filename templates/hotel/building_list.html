@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}Здания{% endblock %}
+
+{% block content %}
+<div class="mb-8">
+    <div class="flex justify-between items-center mb-4">
+        <h2 class="text-2xl font-semibold">Список зданий</h2>
+        <div class="space-x-2">
+            <a href="{% url 'building_add' %}" class="btn-primary">Добавить здание</a>
+            <a href="{% url 'address_list' %}" class="btn-primary">Добавить адрес</a>
+        </div>
+    </div>
+    <div class="bg-white rounded-lg shadow overflow-hidden">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Название</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Адрес</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Вместимость</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Описание</th>
+                    <th class="px-6 py-3"></th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                {% for b in buildings %}
+                <tr>
+                    <td class="px-6 py-4">{{ b.name }}</td>
+                    <td class="px-6 py-4">{{ b.address }}</td>
+                    <td class="px-6 py-4">{{ b.capacity }}</td>
+                    <td class="px-6 py-4">{{ b.description|truncatechars:80 }}</td>
+                    <td class="px-6 py-4 text-right">
+                        <a href="{% url 'building_edit' b.pk %}" class="text-indigo-600 hover:text-indigo-900">Редактировать</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="px-6 py-4 text-center text-gray-500">Нет зарегистрированных зданий.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
