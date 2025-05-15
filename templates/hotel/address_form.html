@@ -1,15 +1,12 @@
 {% extends 'base.html' %}
-{% block title %}{{ form.instance.pk|yesno:"Редактировать адрес,Добавить адрес" }}{% endblock %}
+{% load crispy_forms_tags %}
+{% block title %}{{ view.title }}{% endblock %}
 
 {% block content %}
-<h2 class="text-2xl font-semibold mb-6">
-    {{ form.instance.pk|yesno:"Редактировать адрес,Добавить адрес" }}
-</h2>
-<form method="post" class="bg-white p-6 rounded shadow w-full">
+  <h2 class="text-2xl mb-4">{{ view.title }}</h2>
+  <form method="post" class="space-y-4">
     {% csrf_token %}
-    {{ form.as_p }}
-    <div class="mt-4 flex justify-end">
-        <button type="submit" class="btn-primary">Сохранить</button>
-    </div>
-</form>
+    {{ form|crispy }}
+    <button type="submit" class="btn-primary">Сохранить</button>
+  </form>
 {% endblock %}

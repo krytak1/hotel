@@ -1,5 +1,5 @@
 from django import forms
-from .models import Address, Client, Booking, Payment, ProductOrder, ServiceOrder, BuildingProducts, BuildingServices, Employee, Position, Room, Review, Building
+from .models import Address, Accommodation, Client, Booking, Payment, ProductOrder, ServiceOrder, BuildingProducts, BuildingServices, Employee, Position, Room, Review, Building
 
 class ClientForm(forms.ModelForm):
     phone = forms.CharField(
@@ -204,6 +204,9 @@ class BuildingForm(forms.ModelForm):
     class Meta:
         model = Building
         fields = ['name', 'description', 'capacity', 'address']
+        labels = {
+            'name': 'Название здания',
+        }
         widgets = {
             'name': forms.TextInput(attrs={'class': 'border rounded p-2 w-full'}),
             'description': forms.Textarea(attrs={'class': 'border rounded p-2 w-full', 'rows': 4}),
@@ -216,3 +219,22 @@ class AddressForm(forms.ModelForm):
     class Meta:
         model = Address
         fields = ['city', 'street', 'house']
+
+
+from django import forms
+from .models import Accommodation
+
+class AccommodationForm(forms.ModelForm):
+    class Meta:
+        model = Accommodation
+        fields = ['booking', 'actual_checkin_date', 'actual_checkout_date', 'status']
+        widgets = {
+            'actual_checkin_date': forms.DateInput(attrs={
+                'type': 'date',
+                'class': 'w-full px-3 py-2 border rounded-lg'
+            }),
+            'actual_checkout_date': forms.DateInput(attrs={
+                'type': 'date',
+                'class': 'w-full px-3 py-2 border rounded-lg'
+            }),
+        }

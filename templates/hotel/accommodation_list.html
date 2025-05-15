@@ -1,14 +1,45 @@
 {% extends 'base.html' %}
 {% block title %}Проживания{% endblock %}
+
 {% block content %}
-  <h2 class="text-2xl mb-4">Список проживаний</h2>
-  <ul class="list-disc pl-4">
-    {% for a in accommodations %}
-      <li>
-        Клиент: {{ a.booking.client }} — 
-        {{ a.actual_checkin_date }} → {{ a.actual_checkout_date }} —
-        <a href="{% url 'order_list' a.pk %}" class="text-blue-600 underline">Заказы</a>
-      </li>
-    {% endfor %}
-  </ul>
+<div class="mb-8">
+  <div class="flex justify-between items-center mb-4">
+    <h2 class="text-2xl font-semibold">Проживания</h2>
+    <a href="{% url 'accommodation_add' %}" class="btn-primary">Добавить проживание</a>
+  </div>
+
+  <div class="bg-white rounded-lg shadow overflow-hidden">
+    <table class="min-w-full divide-y divide-gray-200">
+      <thead class="bg-gray-50">
+        <tr>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Клиент</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Номер</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Заезд</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Выезд</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Бронь</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Действия</th>
+        </tr>
+      </thead>
+      <tbody class="bg-white divide-y divide-gray-200">
+        {% for acc in accommodations %}
+        <tr>
+          <td class="px-6 py-4">{{ acc.booking.client.get_full_name }}</td>
+          <td class="px-6 py-4">{{ acc.booking.room }}</td>
+          <td class="px-6 py-4">{{ acc.checkin_date }}</td>
+          <td class="px-6 py-4">{{ acc.checkout_date }}</td>
+          <td class="px-6 py-4">#{{ acc.booking.id }}</td>
+          <td class="px-6 py-4 space-x-2">
+            <a href="{% url 'accommodation_edit' acc.pk %}" class="text-blue-600 hover:underline">✎</a>
+            <a href="{% url 'accommodation_delete' acc.pk %}" class="text-red-600 hover:underline">🗑</a>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="6" class="px-6 py-4 text-center text-gray-500">Нет проживаний</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
 {% endblock %}

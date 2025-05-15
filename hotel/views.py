@@ -21,7 +21,7 @@ from django.db.models import Sum
 
 from .models import Client, Service, Product, Booking, Payment, Room, ProductOrder, ServiceOrder, Accommodation, BuildingProducts, BuildingServices, Building, Employee, Position, Review, Address
   # и другие модели, если нужно
-from .forms import BuildingForm, ClientForm, BookingForm, PaymentForm, ProductOrderForm, ServiceOrderForm, EmployeeForm, PositionForm, BuildingProductsForm, BuildingServicesForm, RoomForm, ReviewForm, AddressForm
+from .forms import BuildingForm, AccommodationForm, ClientForm, BookingForm, PaymentForm, ProductOrderForm, ServiceOrderForm, EmployeeForm, PositionForm, BuildingProductsForm, BuildingServicesForm, RoomForm, ReviewForm, AddressForm
 
 
 class ProtectedView(LoginRequiredMixin, View):
@@ -700,3 +700,39 @@ class ServiceDeleteView(ProtectedView, DeleteView):
     model = Service
     template_name = 'hotel/service_confirm_delete.html'
     success_url = reverse_lazy('service_list')
+
+
+
+class AccommodationListView(ProtectedView, ListView):
+    model = Accommodation
+    template_name = 'hotel/accommodations_list.html'
+    context_object_name = 'accommodations'
+
+class AccommodationCreateView(ProtectedView, CreateView):
+    model = Accommodation
+    form_class = AccommodationForm
+    template_name = 'hotel/accommodation_form.html'
+    success_url = reverse_lazy('accommodation_list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['view'] = self
+        self.title = 'Добавить проживание'
+        return context
+
+class AccommodationUpdateView(ProtectedView, UpdateView):
+    model = Accommodation
+    form_class = AccommodationForm
+    template_name = 'hotel/accommodation_form.html'
+    success_url = reverse_lazy('accommodation_list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['view'] = self
+        self.title = 'Редактировать проживание'
+        return context
+
+class AccommodationDeleteView(ProtectedView, DeleteView):
+    model = Accommodation
+    template_name = 'hotel/accommodation_confirm_delete.html'
+    success_url = reverse_lazy('accommodation_list')

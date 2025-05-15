@@ -21,9 +21,11 @@ urlpatterns = [
     path('bookings/<int:pk>/checkin/', views.CheckInView.as_view(), name='booking_checkin'),
     path('bookings/<int:pk>/checkout/', views.CheckOutView.as_view(), name='booking_checkout'),
     path('accommodations/', views.AccommodationListView.as_view(), name='accommodation_list'),
-    path('accommodations/<int:pk>/orders/', views.OrderListView.as_view(), name='order_list'),
-    path('accommodations/<int:pk>/orders/products/', views.ProductOrderCreateView.as_view(), name='product_order'),
-    path('accommodations/<int:pk>/orders/services/', views.ServiceOrderCreateView.as_view(), name='service_order'),
+    path('accommodations/add/', views.AccommodationCreateView.as_view(), name='accommodation_add'),
+    path('accommodations/<int:pk>/edit/', views.AccommodationUpdateView.as_view(), name='accommodation_edit'),
+    path('accommodations/<int:pk>/delete/', views.AccommodationDeleteView.as_view(), name='accommodation_delete'),
+
+
 
     # --- Платежи ---
     path('payments/', views.PaymentListView.as_view(), name='payment_list'),
@@ -71,11 +73,6 @@ urlpatterns = [
     path('services/<int:pk>/edit/', views.ServiceUpdateView.as_view(), name='service_edit'),
     path('services/<int:pk>/delete/', views.ServiceDeleteView.as_view(), name='service_delete'),
 
-    # --- Инвентарь: остатки товаров и услуг ---
-    path('inventory/stock/', views.BuildingProductsListView.as_view(), name='buildingproducts_list'),
-    path('inventory/stock/<int:pk>/edit/', views.BuildingProductsUpdateView.as_view(), name='buildingproducts_edit'),
-    path('inventory/services/', views.BuildingServicesListView.as_view(), name='buildingservices_list'),
-    path('inventory/services/<int:pk>/edit/', views.BuildingServicesUpdateView.as_view(), name='buildingservices_edit'),
 
     # --- Инвентарь: заказы товаров и услуг (отдельная витрина) ---
     path('inventory/orders/', views.InventoryOrderListView.as_view(), name='inventory_orders'),

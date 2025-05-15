@@ -5,8 +5,12 @@
 <div class="mb-8">
   <div class="flex justify-between items-center mb-4">
     <h2 class="text-2xl font-semibold">Номера</h2>
-    <a href="{% url 'room_create' %}" class="btn-primary">Добавить номер</a>
+    <div class="space-x-2">
+      <a href="{% url 'room_create' %}" class="btn-primary">Добавить номер</a>
+      <a href="{% url 'building_list' %}" class="btn-primary">Здания</a>
+    </div>
   </div>
+
   <div class="bg-white rounded-lg shadow overflow-hidden">
     <table class="min-w-full divide-y divide-gray-200">
       <thead class="bg-gray-50">
