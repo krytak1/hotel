@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}Удалить товар{% endblock %}
+
+{% block content %}
+<div class="max-w-md mx-auto bg-white rounded-lg shadow p-6">
+  <h2 class="text-2xl font-semibold mb-4">Удалить товар</h2>
+  <p>Вы действительно хотите удалить товар «{{ object.name }}»?</p>
+  <form method="post" class="mt-6 flex justify-between">
+    {% csrf_token %}
+    <a href="{% url 'product_list' %}" class="btn-secondary">Отмена</a>
+    <button type="submit" class="btn-primary">Удалить</button>
+  </form>
+</div>
+{% endblock %}

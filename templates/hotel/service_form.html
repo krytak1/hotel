@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}{% if form.instance.pk %}Редактировать услугу{% else %}Новая услуга{% endif %}{% endblock %}
+
+{% block content %}
+<h2 class="text-2xl font-semibold mb-4">
+  {% if form.instance.pk %}Редактировать услугу{% else %}Новая услуга{% endif %}
+</h2>
+<form method="post" class="space-y-4 bg-white rounded-lg shadow p-6">
+  {% csrf_token %}
+  {{ form|crispy }}
+  <div class="flex justify-end">
+    <button type="submit" class="btn-primary">
+      {% if form.instance.pk %}Сохранить{% else %}Создать{% endif %}
+    </button>
+  </div>
+</form>
+{% endblock %}

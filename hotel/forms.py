@@ -102,20 +102,22 @@ class PaymentForm(forms.ModelForm):
 class ProductOrderForm(forms.ModelForm):
     class Meta:
         model = ProductOrder
-        fields = ['product','quantity']
+        fields = ['accommodation','product','quantity']
         widgets = {
-            'product':  forms.Select(attrs={'class':'border rounded p-2 w-full'}),
-            'quantity': forms.NumberInput(attrs={'class':'border rounded p-2 w-full'}),
+            'accommodation': forms.Select(attrs={'class':'border rounded p-2 w-full'}),
+            'product':       forms.Select(attrs={'class':'border rounded p-2 w-full'}),
+            'quantity':      forms.NumberInput(attrs={'class':'border rounded p-2 w-full'}),
         }
-
 
 class ServiceOrderForm(forms.ModelForm):
     class Meta:
         model = ServiceOrder
-        fields = ['service']
+        fields = ['accommodation','service']
         widgets = {
-            'service': forms.Select(attrs={'class':'border rounded p-2 w-full'}),
+            'accommodation': forms.Select(attrs={'class':'border rounded p-2 w-full'}),
+            'service':       forms.Select(attrs={'class':'border rounded p-2 w-full'}),
         }
+
 
 
 class BuildingProductsForm(forms.ModelForm):

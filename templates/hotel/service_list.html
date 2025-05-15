@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block title %}Услуги{% endblock %}
+
+{% block content %}
+<div class="mb-8">
+  <div class="flex items-center mb-4">
+    <h2 class="text-2xl font-semibold">Услуги</h2>
+    <a href="{% url 'service_add' %}" class="btn-primary ml-auto">Добавить услугу</a>
+  </div>
+  <div class="bg-white rounded-lg shadow overflow-hidden">
+    <table class="min-w-full divide-y divide-gray-200">
+      <thead class="bg-gray-50">
+        <tr>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Название</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Описание</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Цена</th>
+          <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Действия</th>
+        </tr>
+      </thead>
+      <tbody class="bg-white divide-y divide-gray-200">
+        {% for s in object_list %}
+        <tr>
+          <td class="px-6 py-4">{{ s.name }}</td>
+          <td class="px-6 py-4">{{ s.description|truncatechars:50 }}</td>
+          <td class="px-6 py-4">₽{{ s.price }}</td>
+          <td class="px-6 py-4 text-center space-x-2">
+            <a href="{% url 'service_edit' s.pk %}" class="text-blue-600 hover:underline">✎</a>
+            <a href="{% url 'service_delete' s.pk %}" class="text-red-600 hover:underline">🗑</a>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="4" class="px-6 py-4 text-center text-gray-500">Нет услуг</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% if is_paginated %}
+  <nav class="mt-4 flex justify-center space-x-2">
+    {% if page_obj.has_previous %}
+      <a href="?page=1" class="btn-primary">&laquo; Первая</a>
+      <a href="?page={{ page_obj.previous_page_number }}" class="btn-primary">&lsaquo; Назад</a>
+    {% endif %}
+    <span class="px-3 py-1">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+    {% if page_obj.has_next %}
+      <a href="?page={{ page_obj.next_page_number }}" class="btn-primary">Вперёд &rsaquo;</a>
+      <a href="?page={{ page_obj.paginator.num_pages }}" class="btn-primary">Последняя &raquo;</a>
+    {% endif %}
+  </nav>
+  {% endif %}
+</div>
+{% endblock %}

@@ -4,6 +4,8 @@ import csv
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+from django.shortcuts import get_object_or_404, redirect
+
 
 from django.db.models import Avg, Count
 from django.utils import timezone
@@ -17,7 +19,7 @@ from django.db.models import Q
 import datetime
 from django.db.models import Sum
 
-from .models import Client, Booking, Payment, Room, ProductOrder, ServiceOrder, Accommodation, BuildingProducts, BuildingServices, Building, Employee, Position, Review, Address
+from .models import Client, Service, Product, Booking, Payment, Room, ProductOrder, ServiceOrder, Accommodation, BuildingProducts, BuildingServices, Building, Employee, Position, Review, Address
   # и другие модели, если нужно
 from .forms import BuildingForm, ClientForm, BookingForm, PaymentForm, ProductOrderForm, ServiceOrderForm, EmployeeForm, PositionForm, BuildingProductsForm, BuildingServicesForm, RoomForm, ReviewForm, AddressForm
 
@@ -609,12 +611,14 @@ class InventoryOrderListView(ProtectedView, TemplateView):
 
 
 
+
+
 class ProductOrderCreateView(ProtectedView, CreateView):
     model = ProductOrder
     form_class = ProductOrderForm
     template_name = 'hotel/productorder_form.html'
-    def get_success_url(self):
-        return reverse('inventory_orders')
+    success_url = reverse_lazy('inventory_orders')
+
 
 class ProductOrderUpdateView(ProtectedView, UpdateView):
     model = ProductOrder
@@ -632,8 +636,8 @@ class ServiceOrderCreateView(ProtectedView, CreateView):
     model = ServiceOrder
     form_class = ServiceOrderForm
     template_name = 'hotel/serviceorder_form.html'
-    def get_success_url(self):
-        return reverse('inventory_orders')
+    success_url = reverse_lazy('inventory_orders')
+
 
 class ServiceOrderUpdateView(ProtectedView, UpdateView):
     model = ServiceOrder
@@ -646,3 +650,53 @@ class ServiceOrderDeleteView(ProtectedView, DeleteView):
     model = ServiceOrder
     template_name = 'hotel/serviceorder_confirm_delete.html'
     success_url = reverse_lazy('inventory_orders')
+
+
+
+# --- Products CRUD ---
+class ProductListView(ProtectedView, ListView):
+    model = Product
+    template_name = 'hotel/product_list.html'
+    context_object_name = 'products'
+    paginate_by = 10
+
+class ProductCreateView(ProtectedView, CreateView):
+    model = Product
+    fields = ['name', 'description', 'price']
+    template_name = 'hotel/product_form.html'
+    success_url = reverse_lazy('product_list')
+
+class ProductUpdateView(ProtectedView, UpdateView):
+    model = Product
+    fields = ['name', 'description', 'price']
+    template_name = 'hotel/product_form.html'
+    success_url = reverse_lazy('product_list')
+
+class ProductDeleteView(ProtectedView, DeleteView):
+    model = Product
+    template_name = 'hotel/product_confirm_delete.html'
+    success_url = reverse_lazy('product_list')
+
+# --- Services CRUD ---
+class ServiceListView(ProtectedView, ListView):
+    model = Service
+    template_name = 'hotel/service_list.html'
+    context_object_name = 'services'
+    paginate_by = 10
+
+class ServiceCreateView(ProtectedView, CreateView):
+    model = Service
+    fields = ['name', 'description', 'price']
+    template_name = 'hotel/service_form.html'
+    success_url = reverse_lazy('service_list')
+
+class ServiceUpdateView(ProtectedView, UpdateView):
+    model = Service
+    fields = ['name', 'description', 'price']
+    template_name = 'hotel/service_form.html'
+    success_url = reverse_lazy('service_list')
+
+class ServiceDeleteView(ProtectedView, DeleteView):
+    model = Service
+    template_name = 'hotel/service_confirm_delete.html'
+    success_url = reverse_lazy('service_list')
