@@ -161,9 +161,15 @@ class Booking(models.Model):
     def __str__(self):
         return f"Бронь #{self.pk} - {self.client} ({self.checkin_date} - {self.checkout_date})"
 
+
+
     def clean(self):
+        if not self.checkin_date or not self.checkout_date:
+            raise ValidationError('Обе даты (заезда и выезда) должны быть заполнены.')
+
         if self.checkin_date >= self.checkout_date:
-            raise ValidationError('Дата заезда должна быть раньше даты выезда')
+            raise ValidationError('Дата заезда должна быть раньше даты выезда.')
+
         qs = Booking.objects.filter(
             room=self.room,
             status__in=['Подтвержден', 'Оплачен'],
@@ -176,9 +182,10 @@ class Booking(models.Model):
             raise ValidationError('Номер недоступен в выбранные даты')
 
     def save(self, *args, **kwargs):
-        delta = self.checkout_date - self.checkin_date
-        days = delta.days
-        self.total_price = self.room.room_type.price_per_night * days
+        if self.checkin_date and self.checkout_date:
+            delta = self.checkout_date - self.checkin_date
+            days = delta.days
+            self.total_price = self.room.room_type.price_per_night * days
         super().save(*args, **kwargs)
 
 
@@ -244,20 +251,6 @@ class Accommodation(models.Model):
             self.booking.room.save()
 
 
-class Review(models.Model):
-    client = models.ForeignKey(Client, on_delete=models.CASCADE, verbose_name='Клиент', related_name='reviews')
-    review_text = models.TextField('Текст отзыва')
-    rating = models.IntegerField('Рейтинг', validators=[MinValueValidator(1), MaxValueValidator(5)])
-    publication_date = models.DateField('Дата публикации', default=timezone.now)
-    booking = models.ForeignKey(Booking, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Бронирование', related_name='reviews')
-
-    class Meta:
-        verbose_name = 'Отзыв'
-        verbose_name_plural = 'Отзывы'
-        ordering = ['-publication_date']
-
-    def __str__(self):
-        return f"Отзыв от {self.client} - {self.rating}/5"
 
 
 class Employee(models.Model):

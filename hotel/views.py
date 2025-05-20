@@ -19,9 +19,9 @@ from django.db.models import Q
 import datetime
 from django.db.models import Sum
 
-from .models import Client, Service, Product, Booking, Payment, Room, ProductOrder, ServiceOrder, Accommodation, BuildingProducts, BuildingServices, Building, Employee, Position, Review, Address
+from .models import Client, Service, Product, Booking, Payment, Room, ProductOrder, ServiceOrder, Accommodation, BuildingProducts, BuildingServices, Building, Employee, Position, Address
   # и другие модели, если нужно
-from .forms import BuildingForm, AccommodationForm, ClientForm, BookingForm, PaymentForm, ProductOrderForm, ServiceOrderForm, EmployeeForm, PositionForm, BuildingProductsForm, BuildingServicesForm, RoomForm, ReviewForm, AddressForm
+from .forms import BuildingForm, AccommodationForm, ClientForm, BookingForm, PaymentForm, ProductOrderForm, ServiceOrderForm, EmployeeForm, PositionForm, BuildingProductsForm, BuildingServicesForm, RoomForm, AddressForm
 
 
 class ProtectedView(LoginRequiredMixin, View):
@@ -71,7 +71,6 @@ class ClientDetailView(ProtectedView, DetailView):
         ctx = super().get_context_data(**kwargs)
         client = self.object
         ctx['bookings'] = Booking.objects.filter(client=client).order_by('-created_at')
-        ctx['reviews'] = Review.objects.filter(client=client).order_by('-publication_date')
         return ctx
 
 
@@ -257,16 +256,7 @@ def export_employees_csv(request):
     return response
 
 
-class ReviewListView(ProtectedView, ListView):
-    model = Review
-    paginate_by = 20
 
-    def get_queryset(self):
-        qs = super().get_queryset()
-        rating = self.request.GET.get('rating')
-        if rating:
-            qs = qs.filter(rating=rating)
-        return qs
 
 class AnalyticsDashboardView(ProtectedView, TemplateView):
     template_name = 'hotel/analytics.html'
@@ -288,10 +278,7 @@ class AnalyticsDashboardView(ProtectedView, TemplateView):
         payments = Payment.objects.filter(payment_date__gte=period_start)
         ctx['monthly_revenue'] = payments.aggregate(total=Sum('amount'))['total'] or 0
 
-        # Качество обслуживания
-        reviews = Review.objects.filter(publication_date__gte=period_start)
-        ctx['average_rating'] = reviews.aggregate(avg=Avg('rating'))['avg'] or 0
-        ctx['complaint_count'] = reviews.filter(rating__lte=2).count()
+
 
         # Данные для графиков (например, доходы по дням)
         daily = payments.annotate(day=TruncDay('payment_date')).values('day') \
@@ -433,8 +420,7 @@ class DashboardView(ProtectedView, TemplateView):
             checkin_date__gte=today
         ).order_by('checkin_date')[:5]
 
-        # Последние отзывы
-        ctx['recent_reviews'] = Review.objects.order_by('-publication_date')[:5]
+
         return ctx
 
 class RoomListView(ProtectedView, ListView):
@@ -455,17 +441,8 @@ class RoomUpdateView(ProtectedView, UpdateView):
     template_name = 'hotel/room_form.html'
     success_url = reverse_lazy('room_list')
 
-class ReviewListView(ProtectedView, ListView):
-    model = Review
-    template_name = 'hotel/review_list.html'
-    context_object_name = 'reviews'
-    paginate_by = 20
 
-class ReviewCreateView(ProtectedView, CreateView):
-    model = Review
-    form_class = ReviewForm
-    template_name = 'hotel/review_form.html'
-    success_url = reverse_lazy('review_list')
+
 
 
 
@@ -494,24 +471,7 @@ class EmployeeExportView(ProtectedView, View):
 
 
 
-class ReportListView(ProtectedView, TemplateView):
-    template_name = 'hotel/report_list.html'
 
-@login_required
-def download_report(request):
-    # Создание простого CSV отчета
-    response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="report.csv"'
-    writer = csv.writer(response)
-
-    # Заголовки отчета
-    writer.writerow(['Column 1', 'Column 2', 'Column 3'])
-
-    # Данные отчета
-    writer.writerow(['Data 1', 'Data 2', 'Data 3'])
-    writer.writerow(['Data 4', 'Data 5', 'Data 6'])
-
-    return response
 
 
 class GlobalSearchView(ProtectedView, ListView):
@@ -736,3 +696,34 @@ class AccommodationDeleteView(ProtectedView, DeleteView):
     model = Accommodation
     template_name = 'hotel/accommodation_confirm_delete.html'
     success_url = reverse_lazy('accommodation_list')
+
+
+class ClientDeleteView(DeleteView):
+    model = Client
+    success_url = reverse_lazy('client_list')
+    template_name = 'hotel/instant_delete.html'
+
+
+class BuildingDeleteView(DeleteView):
+    model = Building
+    success_url = reverse_lazy('building_list')
+    template_name = 'hotel/instant_delete.html'
+
+
+class AddressDeleteView(DeleteView):
+    model = Address
+    success_url = reverse_lazy('address_list')
+    template_name = 'hotel/instant_delete.html'
+
+
+class RoomDeleteView(DeleteView):
+    model = Room
+    success_url = reverse_lazy('room_list')
+    template_name = 'hotel/instant_delete.html'
+
+
+class AccommodationDeleteView(DeleteView):
+    model = Accommodation
+    success_url = reverse_lazy('accommodation_list')
+    template_name = 'hotel/instant_delete.html'
+

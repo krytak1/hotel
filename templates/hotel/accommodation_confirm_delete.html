@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}Удалить проживание{% endblock %}
+
+{% block content %}
+  <div class="max-w-xl mx-auto bg-white shadow rounded-lg p-6">
+    <h2 class="text-2xl font-semibold mb-4">Удалить проживание</h2>
+    <p class="mb-4">Вы уверены, что хотите удалить проживание для клиента
+      <strong>{{ object.booking.client.get_full_name }}</strong>
+      в номере <strong>{{ object.booking.room.room_number }}</strong>?
+    </p>
+    <form method="post">
+      {% csrf_token %}
+      <div class="flex justify-between">
+        <a href="{% url 'accommodation_list' %}" class="btn-secondary">Отмена</a>
+        <button type="submit" class="btn-danger">Удалить</button>
+      </div>
+    </form>
+  </div>
+{% endblock %}

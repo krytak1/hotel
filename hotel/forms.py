@@ -1,5 +1,5 @@
 from django import forms
-from .models import Address, Accommodation, Client, Booking, Payment, ProductOrder, ServiceOrder, BuildingProducts, BuildingServices, Employee, Position, Room, Review, Building
+from .models import Address, Accommodation, Client, Booking, Payment, ProductOrder, ServiceOrder, BuildingProducts, BuildingServices, Employee, Position, Room, Building
 
 class ClientForm(forms.ModelForm):
     phone = forms.CharField(
@@ -179,25 +179,6 @@ class RoomForm(forms.ModelForm):
 
 # forms.py
 
-class ReviewForm(forms.ModelForm):
-    RATING_CHOICES = [(i, '★' * i + '☆' * (5 - i)) for i in range(1, 6)]
-
-    rating = forms.ChoiceField(
-        choices=RATING_CHOICES,
-        widget=forms.Select(attrs={
-            'class': 'border rounded p-2 w-full bg-white',
-        }),
-        label='Рейтинг'
-    )
-
-    class Meta:
-        model = Review
-        fields = ['client', 'booking', 'rating', 'review_text']
-        widgets = {
-            'client': forms.Select(attrs={'class': 'border rounded p-2 w-full'}),
-            'booking': forms.Select(attrs={'class': 'border rounded p-2 w-full'}),
-            'review_text': forms.Textarea(attrs={'class': 'border rounded p-2 w-full', 'rows': 4}),
-        }
 
 
 class BuildingForm(forms.ModelForm):

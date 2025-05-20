@@ -48,9 +48,6 @@ urlpatterns = [
     path('rooms/add/', views.RoomCreateView.as_view(), name='room_create'),
     path('rooms/<int:pk>/edit/', views.RoomUpdateView.as_view(), name='room_update'),
 
-    # --- Отзывы ---
-    path('reviews/', views.ReviewListView.as_view(), name='review_list'),
-    path('reviews/add/', views.ReviewCreateView.as_view(), name='review_create'),
 
     # --- Здания и адреса ---
     path('buildings/', views.BuildingListView.as_view(), name='building_list'),
@@ -87,8 +84,14 @@ urlpatterns = [
 
     # --- Общие ---
     path('inventory/', views.InventoryListView.as_view(), name='inventory_list'),
-    path('reports/', views.ReportListView.as_view(), name='report_list'),
-    path('reports/download/', views.download_report, name='report_download'),
 
     path('search/', GlobalSearchView.as_view(), name='global_search'),
+
+
+
+    path('clients/<int:pk>/delete/', views.ClientDeleteView.as_view(), name='client_delete'),
+    path('buildings/<int:pk>/delete/', views.BuildingDeleteView.as_view(), name='building_delete'),
+    path('addresses/<int:pk>/delete/', views.AddressDeleteView.as_view(), name='address_delete'),
+    path('rooms/<int:pk>/delete/', views.RoomDeleteView.as_view(), name='room_delete'),
+
 ]
