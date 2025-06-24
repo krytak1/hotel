@@ -15,27 +15,61 @@
           <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Название</th>
           <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Описание</th>
           <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Цена</th>
+          <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">В наличии</th>
           <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Действия</th>
         </tr>
       </thead>
       <tbody class="bg-white divide-y divide-gray-200">
-        {% for product in products %}
+        {% for item in products %}
         <tr>
-          <td class="px-6 py-4">{{ product.name }}</td>
-          <td class="px-6 py-4">{{ product.description }}</td>
-          <td class="px-6 py-4">{{ product.price }}</td>
+          <td class="px-6 py-4">{{ item.product.name }}</td>
+          <td class="px-6 py-4">{{ item.product.description }}</td>
+          <td class="px-6 py-4">{{ item.product.price }}</td>
+          <td class="px-6 py-4 text-center">
+            <input type="checkbox"
+                   data-product-id="{{ item.product.pk }}"
+                   {% if item.is_available %}checked{% endif %}
+                   class="availability-toggle"
+                   onchange="updateAvailability(this)">
+          </td>
           <td class="px-6 py-4 text-center space-x-2">
-            <a href="{% url 'product_edit' product.pk %}" class="text-blue-600 hover:underline">✎</a>
-            <a href="{% url 'product_delete' product.pk %}" class="text-red-600 hover:underline">🗑</a>
+            <a href="{% url 'product_edit' item.product.pk %}" class="text-blue-600 hover:underline">✎</a>
+            <a href="{% url 'product_delete' item.product.pk %}" class="text-red-600 hover:underline">🗑</a>
           </td>
         </tr>
         {% empty %}
         <tr>
-          <td colspan="4" class="px-6 py-4 text-center text-gray-500">Нет товаров</td>
+          <td colspan="5" class="px-6 py-4 text-center text-gray-500">Нет товаров</td>
         </tr>
         {% endfor %}
       </tbody>
     </table>
   </div>
 </div>
+
+<script>
+  function updateAvailability(checkbox) {
+    const productId = checkbox.getAttribute('data-product-id');
+    const isAvailable = checkbox.checked;
+    fetch('/update-availability/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'X-CSRFToken': '{{ csrf_token }}'
+      },
+      body: `product_id=${productId}&is_available=${isAvailable}`
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.status === 'error') {
+        alert(data.message);
+        checkbox.checked = !isAvailable; // Возвращаем предыдущее состояние
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      checkbox.checked = !isAvailable; // Возвращаем предыдущее состояние
+    });
+  }
+</script>
 {% endblock %}

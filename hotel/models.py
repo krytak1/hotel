@@ -1,8 +1,8 @@
 from django.db import models
 from django.utils import timezone
-from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.validators import MinValueValidator
 from django.core.exceptions import ValidationError
-from django.db.models import Q
+
 
 
 class Client(models.Model):
@@ -336,7 +336,7 @@ class ServiceOrder(models.Model):
 class BuildingProducts(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Товар')
     building = models.ForeignKey(Building, on_delete=models.CASCADE, verbose_name='Гостиница')
-    available = models.IntegerField('Доступное количество', validators=[MinValueValidator(0)])
+    is_available = models.BooleanField('В наличии', default=False)
 
     class Meta:
         verbose_name = 'Товар в гостинице'
@@ -344,7 +344,8 @@ class BuildingProducts(models.Model):
         unique_together = ['product', 'building']
 
     def __str__(self):
-        return f"{self.product.name} в {self.building.name} - {self.available} шт."
+        status = 'в наличии' if self.is_available else 'нет в наличии'
+        return f"{self.product.name} в {self.building.name} — {status}"
 
 
 class BuildingServices(models.Model):

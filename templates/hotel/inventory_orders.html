@@ -3,8 +3,6 @@
 
 {% block content %}
 <div class="mb-8">
-
-  <!-- Заголовок страницы и кнопки добавления заказов -->
   <div class="flex items-center mb-4 flex-wrap">
     <h2 class="text-2xl font-semibold">Заказы товаров и услуг</h2>
     <div class="ml-auto flex gap-2 mt-2 sm:mt-0">
@@ -13,7 +11,6 @@
     </div>
   </div>
 
-  <!-- Заказы товаров -->
   <section class="mb-10">
     <div class="flex items-center justify-between mb-2">
       <h3 class="text-xl font-semibold">Заказы товаров</h3>
@@ -26,50 +23,34 @@
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Клиент</th>
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Товар</th>
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Кол-во</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Наличие</th>
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Дата</th>
             <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Действия</th>
           </tr>
         </thead>
         <tbody class="bg-white divide-y divide-gray-200">
           {% for item in product_orders %}
-            {% with o=item.order stock=item.stock %}
-            <tr class="{% if stock and stock.available < o.quantity %}bg-red-50{% endif %}">
-              <td class="px-6 py-4">{{ o.accommodation.booking.client.get_full_name }}</td>
-              <td class="px-6 py-4">{{ o.product.name }}</td>
-              <td class="px-6 py-4">{{ o.quantity }}</td>
-              <td class="px-6 py-4">
-                {% if stock and stock.available >= o.quantity %}
-                  <span class="text-green-600 font-bold">✔ ({{ stock.available }})</span>
-                {% else %}
-                  <span class="text-red-600 font-bold">✘</span>
-                {% endif %}
-                {% if stock %}
-                  <div class="mt-1 text-sm">
-                    <a href="{% url 'buildingproducts_edit' stock.pk %}" class="text-blue-500 hover:underline">
-                      Обновить склад
-                    </a>
-                  </div>
-                {% endif %}
-              </td>
-              <td class="px-6 py-4">{{ o.order_date }}</td>
-              <td class="px-6 py-4 text-center space-x-2">
-                <a href="{% url 'productorder_edit' o.pk %}" class="text-blue-600 hover:underline">✎</a>
-                <a href="{% url 'productorder_delete' o.pk %}" class="text-red-600 hover:underline">🗑</a>
-              </td>
-            </tr>
-            {% endwith %}
+          {% if not item.is_service %}
+          <tr>
+            <td class="px-6 py-4">{{ item.order.accommodation.booking.client.get_full_name }}</td>
+            <td class="px-6 py-4">{{ item.order.product.name }}</td>
+            <td class="px-6 py-4">{{ item.order.quantity }}</td>
+            <td class="px-6 py-4">{{ item.order.order_date }}</td>
+            <td class="px-6 py-4 text-center space-x-2">
+              <a href="{% url 'productorder_edit' item.order.pk %}" class="text-blue-600 hover:underline">✎</a>
+              <a href="{% url 'productorder_delete' item.order.pk %}" class="text-red-600 hover:underline">🗑</a>
+            </td>
+          </tr>
+          {% endif %}
           {% empty %}
-            <tr>
-              <td colspan="6" class="px-6 py-4 text-center text-gray-500">Нет заказов товаров</td>
-            </tr>
+          <tr>
+            <td colspan="5" class="px-6 py-4 text-center text-gray-500">Нет заказов товаров</td>
+          </tr>
           {% endfor %}
         </tbody>
       </table>
     </div>
   </section>
 
-  <!-- Заказы услуг -->
   <section>
     <div class="flex items-center justify-between mb-2">
       <h3 class="text-xl font-semibold">Заказы услуг</h3>
@@ -86,16 +67,18 @@
           </tr>
         </thead>
         <tbody class="bg-white divide-y divide-gray-200">
-          {% for o in service_orders %}
+          {% for item in product_orders %}
+          {% if item.is_service %}
           <tr>
-            <td class="px-6 py-4">{{ o.accommodation.booking.client.get_full_name }}</td>
-            <td class="px-6 py-4">{{ o.service.name }}</td>
-            <td class="px-6 py-4">{{ o.order_date }}</td>
+            <td class="px-6 py-4">{{ item.order.accommodation.booking.client.get_full_name }}</td>
+            <td class="px-6 py-4">{{ item.order.service.name }}</td>
+            <td class="px-6 py-4">{{ item.order.order_date }}</td>
             <td class="px-6 py-4 text-center space-x-2">
-              <a href="{% url 'serviceorder_edit' o.pk %}" class="text-blue-600 hover:underline">✎</a>
-              <a href="{% url 'serviceorder_delete' o.pk %}" class="text-red-600 hover:underline">🗑</a>
+              <a href="{% url 'serviceorder_edit' item.order.pk %}" class="text-blue-600 hover:underline">✎</a>
+              <a href="{% url 'serviceorder_delete' item.order.pk %}" class="text-red-600 hover:underline">🗑</a>
             </td>
           </tr>
+          {% endif %}
           {% empty %}
           <tr>
             <td colspan="4" class="px-6 py-4 text-center text-gray-500">Нет заказов услуг</td>
@@ -105,6 +88,5 @@
       </table>
     </div>
   </section>
-
 </div>
 {% endblock %}

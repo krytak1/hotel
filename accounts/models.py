@@ -10,7 +10,6 @@ class Profile(models.Model):
     def __str__(self):
         return f"Profile of {self.user.username}"
 
-# Сигнал: создаём профиль сразу после создания User
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:

@@ -7,7 +7,7 @@
   <p>Вы действительно хотите удалить услугу «{{ object.name }}»?</p>
   <form method="post" class="mt-6 flex justify-between">
     {% csrf_token %}
-    <a href="{% url 'service_list' %}" class="btn-secondary">Отмена</a>
+    <a href="{% url 'inventory_orders' %}" class="btn-secondary">Отмена</a>
     <button type="submit" class="btn-primary">Удалить</button>
   </form>
 </div>
